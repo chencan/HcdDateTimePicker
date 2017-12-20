@@ -26,7 +26,7 @@
 
 #import "HcdDateTimePickerView.h"
 #import "UIColor+HcdCustom.h"
-@import DateTools;
+@import NSDate_Helper;
 
 @interface HcdDateTimePickerView()<UIGestureRecognizerDelegate>
 {
@@ -710,32 +710,32 @@
                 switch (self.datePickerMode) {
                     case DatePickerDateMode:
                         dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay];
-                        date = [NSDate dateWithString:dateTimeStr formatString:@"YYYY-MM-DD"];
+                        date = [NSDate dateFromString:dateTimeStr withFormat:@"yyyy-MM-dd"];
                         break;
                     case DatePickerTimeMode:
                         dateTimeStr = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",(long)self.curHour,(long)self.curMin,(long)self.curSecond];
-                        date = [NSDate dateWithString:dateTimeStr formatString:@"HH:mm:ss"];
+                        date = [NSDate dateFromString:dateTimeStr withFormat:@"HH:mm:ss"];
                         break;
                     case DatePickerMonthDayMode:
                         dateTimeStr = [NSString stringWithFormat:@"%ld-%ld",(long)self.curMonth,(long)self.curDay];
-                        date = [NSDate dateWithString:dateTimeStr formatString:@"MM-DD"];
+                        date = [NSDate dateFromString:dateTimeStr withFormat:@"MMM d"];
                         break;
                     case DatePickerYearMonthMode:
                         dateTimeStr = [NSString stringWithFormat:@"%ld-%ld",(long)self.curYear,(long)self.curMonth];
-                        date = [NSDate dateWithString:dateTimeStr formatString:@"YYYY-MM"];
+                        date = [NSDate dateFromString:dateTimeStr withFormat:@"yyyy-MM"];
                         break;
                     case DatePickerHourMinuteMode:
                         dateTimeStr = [NSString stringWithFormat:@"%02ld:%02ld",(long)self.curHour,(long)self.curMin];
-                        date = [NSDate dateWithString:dateTimeStr formatString:@"HH:mm"];
+                        date = [NSDate dateFromString:dateTimeStr withFormat:@"HH:mm"];
                         break;
                     case DatePickerDateHourMinuteMode:
                         dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin];
-                        date = [NSDate dateWithString:dateTimeStr formatString:@"YYYY-MM-DD HH:mm"];
+                        date = [NSDate dateFromString:dateTimeStr withFormat:@"yyyy-MM-dd HH:mm"];
                         break;
                     case DatePickerDateTimeMode:
                     default:
                         dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin,(long)self.curSecond];
-                        date = [NSDate dateWithString:dateTimeStr formatString:@"YYYY-MM-DD HH:mm:ss"];
+                        date = [NSDate dateFromString:dateTimeStr withFormat:@"yyyy-MM-dd HH:mm:ss"];
                         break;
                 }
             }
