@@ -18,7 +18,7 @@
 //
 //
 
-#define kTopViewHeight kScaleFrom_iPhone5_Desgin(44)
+#define kTopViewHeight kScaleFrom_iPhone5_Desgin(44 * 2)
 #define kTimeBroadcastViewHeight kScaleFrom_iPhone5_Desgin(200)
 #define kDatePickerHeight (kTopViewHeight + kTimeBroadcastViewHeight)
 #define kOKBtnTag 101
@@ -159,7 +159,7 @@
     topView = [[UIView alloc]initWithFrame:CGRectMake(0, 0, kScreen_Width, kTopViewHeight)];
     topView.backgroundColor = _topViewColor;
     
-    okBtn = [[UIButton alloc]initWithFrame:CGRectMake(kScreen_Width-60, 0, 60, kTopViewHeight)];
+    okBtn = [[UIButton alloc]initWithFrame:CGRectMake(kScreen_Width-60, 0, 60, kTopViewHeight / 2)];
     [okBtn setTitleColor:_buttonTitleColor forState:UIControlStateNormal];
     okBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     [okBtn setBackgroundColor:[UIColor clearColor]];
@@ -168,7 +168,7 @@
     okBtn.tag = kOKBtnTag;
     [self addSubview:okBtn];
     
-    cancleBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 60, kTopViewHeight)];
+    cancleBtn = [[UIButton alloc]initWithFrame:CGRectMake(0, 0, 60, kTopViewHeight / 2)];
     cancleBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     [cancleBtn setTitleColor:_buttonTitleColor forState:UIControlStateNormal];
     [cancleBtn setBackgroundColor:[UIColor clearColor]];
@@ -177,13 +177,17 @@
     cancleBtn.tag = kCancleBtnTag;
     [self addSubview:cancleBtn];
     
-    titleLbl = [[UILabel alloc]initWithFrame:CGRectMake(60, 0, kScreen_Width - 120, kTopViewHeight)];
+    titleLbl = [[UILabel alloc]initWithFrame:CGRectMake(60, 0, kScreen_Width - 120, kTopViewHeight / 2)];
     titleLbl.textAlignment = NSTextAlignmentCenter;
     titleLbl.font = [UIFont systemFontOfSize:14];
+    
+    UISwitch *distantFutureSwitch = [UISwitch new];
+    distantFutureSwitch.center = CGPointMake(self.frame.size.width / 2, kTopViewHeight * 3 / 2);
     
     [topView addSubview:okBtn];
     [topView addSubview:cancleBtn];
     [topView addSubview:titleLbl];
+    [topView addSubview:distantFutureSwitch];
     
     timeBroadcastView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, kScreen_Width, kTimeBroadcastViewHeight)];
     timeBroadcastView.backgroundColor = [UIColor redColor];
