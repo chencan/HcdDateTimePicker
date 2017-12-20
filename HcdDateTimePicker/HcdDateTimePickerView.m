@@ -26,6 +26,7 @@
 
 #import "HcdDateTimePickerView.h"
 #import "UIColor+HcdCustom.h"
+@import DateTools;
 
 @interface HcdDateTimePickerView()<UIGestureRecognizerDelegate>
 {
@@ -38,6 +39,7 @@
     MXSCycleScrollView          *hourScrollView;//时滚动视图
     MXSCycleScrollView          *minuteScrollView;//分滚动视图
     MXSCycleScrollView          *secondScrollView;//秒滚动视图
+    UISwitch                    *distantFutureSwitch;
     UIButton                    *okBtn;//自定义picker上的确认按钮
     UIButton                    *cancleBtn;//
     NSString                    *dateTimeStr;
@@ -113,7 +115,7 @@
 
 - (void)initDatas {
     _topViewColor = [UIColor colorWithHexString:@"0x6271f3"];
-    _buttonTitleColor = [UIColor colorWithHexString:@"0xffffff"];
+    _buttonTitleColor = [UIColor blueColor];
 }
 
 - (void)setTopViewColor:(UIColor *)topViewColor {
@@ -181,8 +183,8 @@
     titleLbl.textAlignment = NSTextAlignmentCenter;
     titleLbl.font = [UIFont systemFontOfSize:14];
     
-    UISwitch *distantFutureSwitch = [UISwitch new];
-    distantFutureSwitch.center = CGPointMake(self.frame.size.width / 2, kTopViewHeight * 3 / 2);
+    distantFutureSwitch = [UISwitch new];
+    distantFutureSwitch.center = CGPointMake(self.frame.size.width / 2, kTopViewHeight / 4 * 3);
     
     [topView addSubview:okBtn];
     [topView addSubview:cancleBtn];
@@ -645,14 +647,14 @@
     [UIView animateWithDuration:0.3f delay:0 usingSpringWithDamping:0.8f initialSpringVelocity:0 options:UIViewAnimationOptionLayoutSubviews animations:^{
         
         [weak setBackgroundColor:[UIColor colorWithRed:0 green:0 blue:0 alpha:0.5f]];
-        [timeBroadcastView setFrame:CGRectMake(0, kScreen_Height - kDatePickerHeight, kScreen_Width, kDatePickerHeight)];
+        [timeBroadcastView setFrame:CGRectMake(0, self.superview.frame.size.height - kDatePickerHeight, kScreen_Width, kDatePickerHeight)];
         
     } completion:^(BOOL finished) {
         UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:weak action:@selector(dismiss:)];
         tap.delegate = self;
         [weak addGestureRecognizer:tap];
         
-        [timeBroadcastView setFrame:CGRectMake(0, kScreen_Height - kDatePickerHeight, kScreen_Width, kDatePickerHeight)];
+        [timeBroadcastView setFrame:CGRectMake(0, self.superview.frame.size.height - kDatePickerHeight, kScreen_Width, kDatePickerHeight)];
     }];
 }
 
@@ -701,35 +703,45 @@
     typeof(self) __weak weak = self;
     [self dismissBlock:^(BOOL Complete) {
         if (btns.tag == kOKBtnTag) {
-            
-            switch (self.datePickerMode) {
-                case DatePickerDateMode:
-                    dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay];
-                    break;
-                case DatePickerTimeMode:
-                    dateTimeStr = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",(long)self.curHour,(long)self.curMin,(long)self.curSecond];
-                    break;
-                case DatePickerDateTimeMode:
-                    dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin,(long)self.curSecond];
-                    break;
-                case DatePickerMonthDayMode:
-                    dateTimeStr = [NSString stringWithFormat:@"%ld-%ld",(long)self.curMonth,(long)self.curDay];
-                    break;
-                case DatePickerYearMonthMode:
-                    dateTimeStr = [NSString stringWithFormat:@"%ld-%ld",(long)self.curYear,(long)self.curMonth];
-                    break;
-                case DatePickerHourMinuteMode:
-                    dateTimeStr = [NSString stringWithFormat:@"%02ld:%02ld",(long)self.curHour,(long)self.curMin];
-                    break;
-                case DatePickerDateHourMinuteMode:
-                    dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin];
-                    break;
-                default:
-                    dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin,(long)self.curSecond];
-                    break;
+            NSDate *date;
+            if (distantFutureSwitch.on) {
+                date = [NSDate distantFuture];
+            } else {
+                switch (self.datePickerMode) {
+                    case DatePickerDateMode:
+                        dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay];
+                        date = [NSDate dateWithString:dateTimeStr formatString:@"YYYY-MM-DD"];
+                        break;
+                    case DatePickerTimeMode:
+                        dateTimeStr = [NSString stringWithFormat:@"%02ld:%02ld:%02ld",(long)self.curHour,(long)self.curMin,(long)self.curSecond];
+                        date = [NSDate dateWithString:dateTimeStr formatString:@"HH:mm:ss"];
+                        break;
+                    case DatePickerMonthDayMode:
+                        dateTimeStr = [NSString stringWithFormat:@"%ld-%ld",(long)self.curMonth,(long)self.curDay];
+                        date = [NSDate dateWithString:dateTimeStr formatString:@"MM-DD"];
+                        break;
+                    case DatePickerYearMonthMode:
+                        dateTimeStr = [NSString stringWithFormat:@"%ld-%ld",(long)self.curYear,(long)self.curMonth];
+                        date = [NSDate dateWithString:dateTimeStr formatString:@"YYYY-MM"];
+                        break;
+                    case DatePickerHourMinuteMode:
+                        dateTimeStr = [NSString stringWithFormat:@"%02ld:%02ld",(long)self.curHour,(long)self.curMin];
+                        date = [NSDate dateWithString:dateTimeStr formatString:@"HH:mm"];
+                        break;
+                    case DatePickerDateHourMinuteMode:
+                        dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin];
+                        date = [NSDate dateWithString:dateTimeStr formatString:@"YYYY-MM-DD HH:mm"];
+                        break;
+                    case DatePickerDateTimeMode:
+                    default:
+                        dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin,(long)self.curSecond];
+                        date = [NSDate dateWithString:dateTimeStr formatString:@"YYYY-MM-DD HH:mm:ss"];
+                        break;
+                }
             }
             
-            weak.clickedOkBtn(dateTimeStr);
+            
+            weak.clickedOkBtn(date);
         } else {
             
         }

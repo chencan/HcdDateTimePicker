@@ -37,7 +37,7 @@ typedef enum {
 } DatePickerMode;
 
 typedef void(^DatePickerCompleteAnimationBlock)(BOOL Complete);
-typedef void(^ClickedOkBtn)(NSdate *date);
+typedef void(^ClickedOkBtn)(NSDate *date);
 
 @interface HcdDateTimePickerView : UIView <MXSCycleScrollViewDatasource,MXSCycleScrollViewDelegate>
 @property (nonatomic,strong) ClickedOkBtn clickedOkBtn;
