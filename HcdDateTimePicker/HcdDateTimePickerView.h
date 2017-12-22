@@ -33,7 +33,8 @@ typedef enum {
     DatePickerYearMonthMode,
     DatePickerMonthDayMode,
     DatePickerHourMinuteMode,
-    DatePickerDateHourMinuteMode
+    DatePickerDateHourMinuteMode,
+    DatePickerDateHourMode
 } DatePickerMode;
 
 typedef void(^DatePickerCompleteAnimationBlock)(BOOL Complete);
