@@ -752,6 +752,10 @@
                         dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin];
                         date = [NSDate dateFromString:dateTimeStr withFormat:@"yyyy-MM-dd HH:mm"];
                         break;
+                    case DatePickerDateHourMode:
+                        dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin];
+                        date = [NSDate dateFromString:dateTimeStr withFormat:@"yyyy-MM-dd HH"];
+                        break;
                     case DatePickerDateTimeMode:
                     default:
                         dateTimeStr = [NSString stringWithFormat:@"%ld-%ld-%ld %02ld:%02ld:%02ld",(long)self.curYear,(long)self.curMonth,(long)self.curDay,(long)self.curHour,(long)self.curMin,(long)self.curSecond];
